@@ -1,6 +1,6 @@
 {
   "name": "@get-tomo/tomo-client-telemetry-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Drop-in SDK to initialize and instrument web applications. It collects traces and sends them to the specified collector URL. It follows the OpenTelemetry specification.",
   "main": "src/index.js",
