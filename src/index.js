@@ -1,18 +1,15 @@
 /**
  * Entry point for Tomo Client Telemetry SDK.
- * Exports the TomoClientTelemetry class for web application instrumentation.
+ * Exports the TomoClientTelemetry class for web application network instrumentation.
  * @module index
  */
 
 import { setupTracer, getTracer } from "./otel/tracers.js";
-import { wrapFetch } from "./patch-fetch.js";
-import { setupNavigationTracking } from "./navigation/navigation-tracker.js";
-import { setupErrorTracking } from "./errors/error-tracker.js";
-import { setupPerformanceTracking } from "./performance/performance-tracker.js";
+import { patchFetch } from "./patch-fetch.js";
 import { setConfig } from "./store/config-store.js";
 
 /**
- * TomoClientTelemetry provides tracing utilities for web applications.
+ * TomoClientTelemetry provides network tracing utilities for web applications.
  */
 class TomoClientTelemetry {
   /**
@@ -32,8 +29,8 @@ class TomoClientTelemetry {
     setupTracer();
     this.tracer = getTracer();
     
-    // Initialize tracking modules
-    this._initializeTracking();
+    // Initialize network tracing
+    this._initializeNetworkTracing();
   }
 
   /**
@@ -45,82 +42,12 @@ class TomoClientTelemetry {
   }
 
   /**
-   * Initializes all tracking modules
+   * Initializes network tracing
    * @private
    */
-  _initializeTracking() {
-    const config = getConfig();
-    
+  _initializeNetworkTracing() {
     // Setup fetch patching for HTTP request tracing
-    wrapFetch();
-    
-    // Setup navigation tracking for SPA routing
-    setupNavigationTracking();
-    
-    // Setup error tracking for unhandled errors
-    setupErrorTracking();
-    
-    // Setup performance tracking for web vitals
-    setupPerformanceTracking();
-  }
-
-  /**
-   * Manually track a custom event
-   * @param {string} name - Event name
-   * @param {object} attributes - Event attributes
-   */
-  trackEvent(name, attributes = {}) {
-    const tracer = getTracer();
-    if (!tracer) return;
-
-    const span = tracer.startSpan(name, {
-      attributes: {
-        'event.type': 'custom',
-        ...attributes
-      }
-    });
-    span.end();
-  }
-
-  /**
-   * Manually track a user interaction
-   * @param {string} elementId - Element ID or selector
-   * @param {string} action - Action type (click, input, etc.)
-   * @param {object} attributes - Additional attributes
-   */
-  trackInteraction(elementId, action, attributes = {}) {
-    const tracer = getTracer();
-    if (!tracer) return;
-
-    const span = tracer.startSpan('user.interaction', {
-      attributes: {
-        'interaction.element': elementId,
-        'interaction.action': action,
-        'interaction.type': 'user',
-        ...attributes
-      }
-    });
-    span.end();
-  }
-
-  /**
-   * Track page view with custom attributes
-   * @param {string} pageName - Page name or route
-   * @param {object} attributes - Page view attributes
-   */
-  trackPageView(pageName, attributes = {}) {
-    const tracer = getTracer();
-    if (!tracer) return;
-
-    const span = tracer.startSpan('page.view', {
-      attributes: {
-        'page.name': pageName,
-        'page.url': window.location.href,
-        'page.title': document.title,
-        ...attributes
-      }
-    });
-    span.end();
+    patchFetch();
   }
 }
 

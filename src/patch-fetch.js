@@ -109,7 +109,7 @@ function extractQueryParams(url) {
 /**
  * Patches globalThis.fetch to add OpenTelemetry tracing.
  */
-export function wrapFetch() {
+export function patchFetch() {
   if (globalThis.__patchedFetch) return;
 
   const config = getConfig();
