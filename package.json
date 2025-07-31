@@ -1,6 +1,6 @@
 {
   "name": "@get-tomo/tomo-client-telemetry-sdk",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "description": "Drop-in SDK to initialize and instrument web applications. It collects network traces and sends them to the specified collector URL. It follows the OpenTelemetry specification.",
   "main": "dist/index.js",
@@ -13,8 +13,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "build": "npm run clean && rollup -c",
+    "dev": "npm run clean && rollup -c -w",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"

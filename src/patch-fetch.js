@@ -154,6 +154,7 @@ export function patchFetch() {
         ...(queryParams !== undefined ? { 'httpQueryParams': queryParams } : {})
       }
     }, async (span) => {
+      console.log('Running with span', span);
       try {
         const res = await originalFetch(input, init);
         setHttpSpanStatus(span, res);
